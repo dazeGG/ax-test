@@ -1,5 +1,21 @@
+<script setup lang="ts">
+import { ref } from "vue";
+
+import type { Ref } from "vue";
+import type { IPost } from "~/typing/IPost";
+
+import VPage from "~/components/UI/VPage.vue";
+import PostsList from "~/components/Posts/List.vue";
+
+const posts: Ref<IPost[]> = ref([]);
+
+fetch("https://jsonplaceholder.typicode.com/posts").then(async (response) => {
+  posts.value = await response.json();
+});
+</script>
+
 <template>
-  <div>
-    <NuxtWelcome />
-  </div>
+  <VPage>
+    <PostsList :posts="posts" />
+  </VPage>
 </template>
