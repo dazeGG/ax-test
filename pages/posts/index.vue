@@ -33,9 +33,7 @@ const loadPosts = ({ page, rows }: { page: number; rows: number }): void => {
     .finally(() => (loading.value = false));
 };
 
-onMounted(() => {
-  loadPosts({ page: 0, rows: 5 });
-});
+onMounted(() => loadPosts({ page: 0, rows: 5 }));
 </script>
 
 <template>
