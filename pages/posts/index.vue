@@ -82,8 +82,4 @@ onMounted(async () => (posts.value = await loadPosts()));
 :deep(.p-dropdown) {
   align-items: center;
 }
-
-:deep(.p-inputtext) {
-  padding: 0 0 0 1rem;
-}
 </style>
