@@ -21,7 +21,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <VPage :title="post.title">
+  <VPage :title="post.title" :has-back-button="true">
     {{ post.body }}
   </VPage>
 </template>
