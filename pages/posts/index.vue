@@ -11,8 +11,6 @@ import PostsList from "~/components/Posts/List";
 
 const posts: Ref<IPost[]> = ref([]);
 
-onMounted(async () => (posts.value = await loadPosts()));
-
 const loadPosts = async (
   page: number = 0,
   rows: number = 5,
@@ -31,6 +29,8 @@ const loadPosts = async (
 
 const pageUpdate = async ({ page, rows }: { page: number; rows: number }) =>
   (posts.value = await loadPosts(page, rows));
+
+onMounted(async () => (posts.value = await loadPosts()));
 </script>
 
 <template>
