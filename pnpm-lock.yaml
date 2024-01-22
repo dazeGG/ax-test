@@ -20,7 +20,7 @@ devDependencies:
     specifier: ^12.1.0
     version: 12.1.0(eslint@8.56.0)(typescript@5.3.3)
   '@typescript-eslint/parser':
-    specifier: ^6.19.0
+    specifier: ^6.19.1
     version: 6.19.1(eslint@8.56.0)(typescript@5.3.3)
   eslint:
     specifier: ^8.56.0
