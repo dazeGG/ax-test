@@ -26,7 +26,7 @@ const props = defineProps<{
   }
 
   &__body {
-    font-size: 0.75rem;
+    font-size: 0.8rem;
   }
 }
 </style>
