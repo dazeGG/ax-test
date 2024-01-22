@@ -26,7 +26,7 @@ const props = defineProps<{
   &__list {
     display: flex;
     flex-direction: column;
-    row-gap: 0.5rem;
+    row-gap: 0.75rem;
   }
 }
 </style>
