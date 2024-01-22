@@ -4,8 +4,8 @@ import { ref } from "vue";
 import type { Ref } from "vue";
 import type { IPost } from "~/typing/IPost";
 
-import VPage from "~/components/UI/VPage.vue";
-import PostsList from "~/components/Posts/List.vue";
+import VPage from "~/components/UI/VPage";
+import PostsList from "~/components/Posts/List";
 
 const posts: Ref<IPost[]> = ref([]);
 
