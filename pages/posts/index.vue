@@ -30,9 +30,9 @@ const loadPosts = async (
 
   const posts: IPost[] = [];
 
-  for (let i = page * rows + 1; i < (page + 1) * rows + 1; i++) {
+  for (let postId = page * rows + 1; postId < (page + 1) * rows + 1; postId++) {
     const post = await (
-      await fetch(`https://jsonplaceholder.typicode.com/posts/${i}`)
+      await fetch(`https://jsonplaceholder.typicode.com/posts/${postId}`)
     ).json();
     posts.push(post);
   }
