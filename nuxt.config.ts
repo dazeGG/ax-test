@@ -8,7 +8,6 @@ export default defineNuxtConfig({
   modules: ["nuxt-primevue"],
   primevue: {
     components: {
-      prefix: "V",
       include: ["Paginator", "ProgressSpinner", "InputText"],
     },
   },
