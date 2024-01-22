@@ -40,7 +40,6 @@ const back = () => history.back();
     cursor: pointer;
     opacity: 0;
     transition: opacity 100ms ease-in-out;
-    background: rgb(51, 51, 51);
     background: linear-gradient(90deg, #222222 0%, rgb(0, 0, 0, 0) 100%);
     border: none;
 
