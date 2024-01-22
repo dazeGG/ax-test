@@ -66,6 +66,7 @@ onMounted(() => loadPosts({ page: 0, rows: 5 }));
 :deep(.p-paginator) {
   background: unset;
   border: unset;
+  justify-content: center;
 }
 
 :deep(.p-dropdown) {
