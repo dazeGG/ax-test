@@ -7,14 +7,18 @@ import type { Ref } from "vue";
 import type { IPost } from "~/typing/IPost";
 
 import VPage from "~/components/UI/VPage";
+import VLoader from "~/components/UI/VLoader";
 import PostsList from "~/components/Posts/List";
 
+const loading: Ref<Boolean> = ref(false);
 const posts: Ref<IPost[]> = ref([]);
 
 const loadPosts = async (
   page: number = 0,
   rows: number = 5,
 ): Promise<IPost[]> => {
+  loading.value = true;
+
   const posts: IPost[] = [];
 
   for (let i = page * rows + 1; i < (page + 1) * rows + 1; i++) {
@@ -24,6 +28,7 @@ const loadPosts = async (
     posts.push(post);
   }
 
+  loading.value = false;
   return posts;
 };
 
@@ -35,6 +40,7 @@ onMounted(async () => (posts.value = await loadPosts()));
 
 <template>
   <VPage title="Posts">
+    <VLoader v-if="loading" />
     <PostsList :posts="posts" />
     <Paginator
       :rows="5"
