@@ -8,7 +8,7 @@ export default defineNuxtConfig({
   modules: ["nuxt-primevue"],
   primevue: {
     components: {
-      include: ["Paginator", "ProgressSpinner", "InputText"],
+      include: ["Paginator", "ProgressSpinner", "InputText", "Button"],
     },
   },
 });
