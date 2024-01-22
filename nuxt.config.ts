@@ -9,8 +9,7 @@ export default defineNuxtConfig({
   primevue: {
     components: {
       prefix: "V",
-      include: "*",
-      exclude: [],
+      include: ["Paginator"],
     },
   },
 });
