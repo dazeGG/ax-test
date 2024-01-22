@@ -15,7 +15,7 @@ fetch("https://jsonplaceholder.typicode.com/posts").then(async (response) => {
 </script>
 
 <template>
-  <VPage>
+  <VPage title="Posts">
     <PostsList :posts="posts" />
   </VPage>
 </template>
