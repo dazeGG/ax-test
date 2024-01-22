@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed, onMounted } from "vue";
+import { ref, watchEffect, onMounted } from "vue";
 
 import InputText from "primevue/inputtext";
 import Paginator from "primevue/paginator";
@@ -13,47 +13,59 @@ import PostsList from "~/components/Posts/List";
 
 const loading: Ref<boolean> = ref(true);
 const search: Ref<string> = ref("");
+const page: Ref<number> = ref(1);
+const lastPage: Ref<number> = ref(20);
+const rows: Ref<number> = ref(5);
 const posts: Ref<IPost[]> = ref([]);
 
-const filteredPosts = computed(() =>
-  posts.value.filter(
-    (post: IPost) =>
-      post.title.toLowerCase().includes(search.value.toLowerCase()) ||
-      post.body.toLowerCase().includes(search.value.toLowerCase()),
-  ),
-);
-
-const loadPosts = ({ page, rows }: { page: number; rows: number }): void => {
+const loadPosts = () => {
   loading.value = true;
   fetch(
-    `https://jsonplaceholder.typicode.com/posts?_start=${page * rows}&_limit=${rows}`,
+    `https://jsonplaceholder.typicode.com/posts?q=${search.value}&_page=${page.value}&_limit=${rows.value}`,
   )
     .then(async (res) => {
+      lastPage.value = parseInt(
+        res.headers
+          .get("Link")
+          .split(";")[2]
+          .split(", ")[1]
+          .split("&")[1]
+          .split("=")[1],
+      );
       posts.value = await res.json();
     })
     .finally(() => (loading.value = false));
 };
 
-onMounted(() => loadPosts({ page: 0, rows: 5 }));
+const updatePage = ({ page: newPage }: { page: number }) =>
+  (page.value = newPage + 1);
+
+onMounted(() => loadPosts());
+
+watchEffect(loadPosts);
 </script>
 
 <template>
   <VPage title="Posts">
     <template #header-right>
-      <span class="p-input-icon-left">
-        <i class="pi pi-search" />
-        <InputText v-model="search" placeholder="Search" />
-      </span>
+      <div class="actions">
+        <div class="actions__sort"></div>
+        <span class="p-input-icon-left actions__search">
+          <i class="pi pi-search" />
+          <InputText v-model="search" placeholder="Search" />
+        </span>
+      </div>
     </template>
     <template #default>
       <VLoader v-if="loading" />
-      <PostsList :posts="filteredPosts" />
+      <PostsList :posts="posts" />
       <Paginator
-        :rows="5"
-        :total-records="100"
+        :rows="rows"
+        :total-records="rows * lastPage"
         :rows-per-page-options="[5, 10, 20, 30, 40, 50]"
         class="paginator"
-        @page="loadPosts"
+        @update:rows="(value: number) => (rows = value)"
+        @page="updatePage"
       />
     </template>
   </VPage>
