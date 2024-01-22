@@ -1,3 +1,4 @@
+<!-- LIFE SEARCH СДЕЛАЛ НА ФРОНТЕ, Т.К. НЕ НАШЕЛ В ДОКЕ ПОИСКА ПО КОНКРЕТНЫМ ПОЛЯМ -->
 <script setup lang="ts">
 import _ from "lodash";
 
@@ -38,8 +39,12 @@ const loadComments = () => {
   loading.value = true;
 
   fetch(
-    // `https://jsonplaceholder.typicode.com/comments?_start=${comments.value.length}&_limit=${loadingCommentsLimit}`, // * Для проверки загрузки комментов при скролле
-    `https://jsonplaceholder.typicode.com/comments?postId=${post.value.id}&_start=${comments.value.length}&_limit=${loadingCommentsLimit}`, // * Для загрузки комментов к конкретному посту
+    "https://jsonplaceholder.typicode.com/comments?" +
+      new URLSearchParams({
+        postId: post.value.id.toString(), // * Можно закомментировать эту строчку для проверки подгрузки комментов по скроллу
+        _start: comments.value.length.toString(),
+        _limit: loadingCommentsLimit.toString(),
+      }),
   )
     .then(async (res) => {
       const newComments = await res.json();
@@ -91,5 +96,3 @@ onMounted(() => {
     </div>
   </VPage>
 </template>
-
-<style scoped lang="scss"></style>
