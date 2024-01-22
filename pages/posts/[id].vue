@@ -1,6 +1,8 @@
 <script setup lang="ts">
-import { ref, onMounted } from "vue";
+import { ref, computed, onMounted } from "vue";
 import { useRoute } from "vue-router";
+
+import InputText from "primevue/inputtext";
 
 import type { Ref } from "vue";
 import type { IPost } from "~/typing/IPost";
@@ -11,17 +13,34 @@ import VPage from "~/components/UI/VPage";
 import CommentsList from "~/components/Comments/List";
 
 const loading: Ref<boolean> = ref(true);
-const post: Ref<IPost> = ref({});
+const post: Ref<IPost> = ref({
+  id: 0,
+  title: "Mock post title",
+  body: "Mock post body",
+  userId: 0,
+});
+
+const search: Ref<string> = ref("");
 const comments: Ref<IComment[]> = ref([]);
+
+const filteredComments = computed(() =>
+  comments.value.filter(
+    (comment: IComment) =>
+      comment.name.toLowerCase().includes(search.value.toLowerCase()) ||
+      comment.email.toLowerCase().includes(search.value.toLowerCase()),
+  ),
+);
 
 const loadComments = () => {
   loading.value = true;
 
   fetch(
-    `https://jsonplaceholder.typicode.com/comments?postId=${post.value.id}&_start=${comments.value.length}&_limit=5`,
+    `https://jsonplaceholder.typicode.com/comments?postId=${post.value.id}&_start=${comments.value.length}&_limit=3`,
   )
     .then(async (res) =>
-      (await res.json()).forEach((comment) => comments.value.push(comment)),
+      (await res.json()).forEach((comment: IComment) =>
+        comments.value.push(comment),
+      ),
     )
     .finally(() => (loading.value = false));
 };
@@ -45,7 +64,14 @@ onMounted(() => {
     <VLoader v-if="loading" />
     <div class="post">
       <p class="post__body" v-text="post.body" />
-      <CommentsList class="post__comments" :comments="comments" />
+      <CommentsList class="post__comments" :comments="filteredComments">
+        <template #header-right>
+          <span class="p-input-icon-left">
+            <i class="pi pi-search" />
+            <InputText v-model="search" placeholder="Search by user" />
+          </span>
+        </template>
+      </CommentsList>
     </div>
   </VPage>
 </template>

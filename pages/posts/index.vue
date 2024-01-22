@@ -17,8 +17,9 @@ const posts: Ref<IPost[]> = ref([]);
 
 const filteredPosts = computed(() =>
   posts.value.filter(
-    (post) =>
-      post.title.includes(search.value) || post.body.includes(search.value),
+    (post: IPost) =>
+      post.title.toLowerCase().includes(search.value.toLowerCase()) ||
+      post.body.toLowerCase().includes(search.value.toLowerCase()),
   ),
 );
 
