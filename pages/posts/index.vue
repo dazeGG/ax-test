@@ -7,44 +7,34 @@ import Paginator from "primevue/paginator";
 import type { Ref } from "vue";
 import type { IPost } from "~/typing/IPost";
 
-import VPage from "~/components/UI/VPage";
 import VLoader from "~/components/UI/VLoader";
+import VPage from "~/components/UI/VPage";
 import PostsList from "~/components/Posts/List";
 
-const loading: Ref<boolean> = ref(false);
+const loading: Ref<boolean> = ref(true);
 const search: Ref<string> = ref("");
 const posts: Ref<IPost[]> = ref([]);
 
 const filteredPosts = computed(() =>
   posts.value.filter(
-    (post) =>
-      post.title.includes(search.value) || post.body.includes(search.value),
+    (post: IPost) =>
+      post.title.toLowerCase().includes(search.value.toLowerCase()) ||
+      post.body.toLowerCase().includes(search.value.toLowerCase()),
   ),
 );
 
-const loadPosts = async (
-  page: number = 0,
-  rows: number = 5,
-): Promise<IPost[]> => {
+const loadPosts = ({ page, rows }: { page: number; rows: number }): void => {
   loading.value = true;
-
-  const posts: IPost[] = [];
-
-  for (let i = page * rows + 1; i < (page + 1) * rows + 1; i++) {
-    const post = await (
-      await fetch(`https://jsonplaceholder.typicode.com/posts/${i}`)
-    ).json();
-    posts.push(post);
-  }
-
-  loading.value = false;
-  return posts;
+  fetch(
+    `https://jsonplaceholder.typicode.com/posts?_start=${page * rows}&_limit=${rows}`,
+  )
+    .then(async (res) => {
+      posts.value = await res.json();
+    })
+    .finally(() => (loading.value = false));
 };
 
-const pageUpdate = async ({ page, rows }: { page: number; rows: number }) =>
-  (posts.value = await loadPosts(page, rows));
-
-onMounted(async () => (posts.value = await loadPosts()));
+onMounted(() => loadPosts({ page: 0, rows: 5 }));
 </script>
 
 <template>
@@ -63,7 +53,7 @@ onMounted(async () => (posts.value = await loadPosts()));
         :total-records="100"
         :rows-per-page-options="[5, 10, 20, 30, 40, 50]"
         class="paginator"
-        @page="pageUpdate"
+        @page="loadPosts"
       />
     </template>
   </VPage>
@@ -77,6 +67,7 @@ onMounted(async () => (posts.value = await loadPosts()));
 :deep(.p-paginator) {
   background: unset;
   border: unset;
+  justify-content: center;
 }
 
 :deep(.p-dropdown) {
