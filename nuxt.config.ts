@@ -4,6 +4,7 @@ export default defineNuxtConfig({
   imports: {
     autoImport: false,
   },
+  css: ["~/assets/styles/main.css"],
   modules: ["nuxt-primevue"],
   primevue: {
     components: {
