@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { IPost } from "~/typing/IPost";
 
-import PostsItem from "~/components/Posts/Item.vue";
+import PostsItem from "~/components/Posts/Item";
 
 const props = defineProps<{
   posts: IPost[];
