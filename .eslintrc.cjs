@@ -12,7 +12,7 @@ module.exports = {
   plugins: [],
   rules: {
     "vue/multi-word-component-names": ["error", {
-      "ignores": ["List", "Item", "index"]
+      "ignores": ["List", "Item", "index", "[id]"]
     }]
   },
 };
