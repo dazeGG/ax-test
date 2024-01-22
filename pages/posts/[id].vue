@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import _ from "lodash";
+
 import { ref, computed, onMounted } from "vue";
 import { useRoute } from "vue-router";
 
@@ -21,6 +23,7 @@ const post: Ref<IPost> = ref({
 });
 
 const search: Ref<string> = ref("");
+const loadingCommentsLimit = 5;
 const comments: Ref<IComment[]> = ref([]);
 
 const filteredComments = computed(() =>
@@ -35,17 +38,30 @@ const loadComments = () => {
   loading.value = true;
 
   fetch(
-    `https://jsonplaceholder.typicode.com/comments?postId=${post.value.id}&_start=${comments.value.length}&_limit=3`,
+    // `https://jsonplaceholder.typicode.com/comments?_start=${comments.value.length}&_limit=${loadingCommentsLimit}`, // * Для проверки загрузки комментов при скролле
+    `https://jsonplaceholder.typicode.com/comments?postId=${post.value.id}&_start=${comments.value.length}&_limit=${loadingCommentsLimit}`, // * Для загрузки комментов к конкретному посту
   )
-    .then(async (res) =>
-      (await res.json()).forEach((comment: IComment) =>
-        comments.value.push(comment),
-      ),
-    )
+    .then(async (res) => {
+      const newComments = await res.json();
+
+      newComments.forEach((comment: IComment) => comments.value.push(comment));
+
+      if (newComments.length < loadingCommentsLimit)
+        document.removeEventListener("scroll", loadCommentsCheck);
+      else loadCommentsCheck();
+    })
     .finally(() => (loading.value = false));
 };
 
+const loadCommentsCheck = _.debounce(() => {
+  const bottom = window.pageYOffset + window.innerHeight;
+  const pageHeight = document.documentElement.offsetHeight;
+  if (pageHeight - bottom < 100) loadComments();
+}, 200);
+
 onMounted(() => {
+  document.addEventListener("scroll", loadCommentsCheck);
+
   const {
     params: { id: postId },
   } = useRoute();
