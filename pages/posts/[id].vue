@@ -1,3 +1,4 @@
+<!-- LIFE SEARCH СДЕЛАЛ НА ФРОНТЕ, Т.К. НЕ НАШЕЛ В ДОКЕ ПОИСКА ПО КОНКРЕТНЫМ ПОЛЯМ -->
 <script setup lang="ts">
 import _ from "lodash";
 
@@ -95,5 +96,3 @@ onMounted(() => {
     </div>
   </VPage>
 </template>
-
-<style scoped lang="scss"></style>
