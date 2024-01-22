@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import { ref, onMounted } from "vue";
+import { ref, computed, onMounted } from "vue";
 
+import InputText from "primevue/inputtext";
 import Paginator from "primevue/paginator";
 
 import type { Ref } from "vue";
@@ -10,8 +11,16 @@ import VPage from "~/components/UI/VPage";
 import VLoader from "~/components/UI/VLoader";
 import PostsList from "~/components/Posts/List";
 
-const loading: Ref<Boolean> = ref(false);
+const loading: Ref<boolean> = ref(false);
+const search: Ref<string> = ref("");
 const posts: Ref<IPost[]> = ref([]);
+
+const filteredPosts = computed(() =>
+  posts.value.filter(
+    (post) =>
+      post.title.includes(search.value) || post.body.includes(search.value),
+  ),
+);
 
 const loadPosts = async (
   page: number = 0,
@@ -40,15 +49,23 @@ onMounted(async () => (posts.value = await loadPosts()));
 
 <template>
   <VPage title="Posts">
-    <VLoader v-if="loading" />
-    <PostsList :posts="posts" />
-    <Paginator
-      :rows="5"
-      :total-records="100"
-      :rows-per-page-options="[5, 10, 20, 30, 40, 50]"
-      class="paginator"
-      @page="pageUpdate"
-    />
+    <template #header-right>
+      <span class="p-input-icon-left">
+        <i class="pi pi-search" />
+        <InputText v-model="search" placeholder="Search" />
+      </span>
+    </template>
+    <template #default>
+      <VLoader v-if="loading" />
+      <PostsList :posts="filteredPosts" />
+      <Paginator
+        :rows="5"
+        :total-records="100"
+        :rows-per-page-options="[5, 10, 20, 30, 40, 50]"
+        class="paginator"
+        @page="pageUpdate"
+      />
+    </template>
   </VPage>
 </template>
 
