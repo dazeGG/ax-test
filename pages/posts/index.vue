@@ -7,8 +7,8 @@ import Paginator from "primevue/paginator";
 import type { Ref } from "vue";
 import type { IPost } from "~/typing/IPost";
 
-import VPage from "~/components/UI/VPage";
 import VLoader from "~/components/UI/VLoader";
+import VPage from "~/components/UI/VPage";
 import PostsList from "~/components/Posts/List";
 
 const loading: Ref<boolean> = ref(true);
