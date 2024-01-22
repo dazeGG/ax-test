@@ -9,7 +9,7 @@ export default defineNuxtConfig({
   primevue: {
     components: {
       prefix: "V",
-      include: ["Paginator"],
+      include: ["Paginator", "ProgressSpinner", "InputText"],
     },
   },
 });
