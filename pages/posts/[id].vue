@@ -11,10 +11,10 @@ const post: Ref<IPost> = ref({});
 
 onMounted(() => {
   const {
-    params: { id },
+    params: { id: postId },
   } = useRoute();
 
-  fetch(`https://jsonplaceholder.typicode.com/posts/${id}`).then(
+  fetch(`https://jsonplaceholder.typicode.com/posts/${postId}`).then(
     async (response) => (post.value = await response.json()),
   );
 });
