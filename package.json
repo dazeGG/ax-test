@@ -30,5 +30,8 @@
   "dependencies": {
     "primeicons": "^6.0.1",
     "primevue": "^3.46.0"
+  },
+  "engines": {
+    "node": "~16.14.2"
   }
 }
